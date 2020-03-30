@@ -24,3 +24,11 @@ code {
   background-color: rgba(0,0,0,0.5);
   text-align: center;
 }
+
+.cropper-button {
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  text-decoration: underline;
+  cursor: pointer;
+}

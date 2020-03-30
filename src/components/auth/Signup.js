@@ -3,11 +3,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { withRouter } from 'react-router-dom';
 
 import { APIService, AppLocalStorage, Toaster } from '../util';
+import ImageCropper from '../common/ImageCropper';
 import LoginLogo from '../../assets/images/magnetIcons.png';
-import BackArrow from '../../assets/images/backArrow.png'
-import UploadAvtar from '../../assets/images/avtaar.svg'
+import BackArrow from '../../assets/images/backArrow.png';
+import UploadAvtar from '../../assets/images/avtaar.svg';
 
-class SignpuStepone extends Component {
+class Signup extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,11 +21,14 @@ class SignpuStepone extends Component {
       mls: '',
       profilePic: '',
       password: '',
-      facebookId: ''
+      facebookId: '',
+      imgSrc: undefined,
+      imgBlob: undefined,
     };
   }
 
   componentDidMount = async () => {
+    
     // check if Facebook Id is present and userId is not present
     // Then setup user signup for facebook user
     const facebookId = AppLocalStorage.getFacebookId();
@@ -93,63 +97,58 @@ class SignpuStepone extends Component {
       this.setState({
         name: e.target.value
       })
-    }
-
-    else if (e.target.id === 'address')
-    {
+    } else if (e.target.id === 'address') {
       this.setState({
         address: e.target.value
       })
-    }
-
-    else if (e.target.id === 'email')
-    {
+    } else if (e.target.id === 'email') {
       this.setState({
         email: e.target.value
       })
-    }
-
-    else if (e.target.id === 'phone')
-    {
+    } else if (e.target.id === 'phone') {
       this.setState({
         phone: e.target.value
       })
-    }
-
-    else if (e.target.id === 'brokerage')
-    {
+    } else if (e.target.id === 'brokerage') {
       this.setState({
         brokerage: e.target.value
       })
-    }
-
-    else if (e.target.id === 'mls')
-    {
+    } else if (e.target.id === 'mls') {
       this.setState({
         mls: e.target.value
       })
-    }
+    } else if (e.target.id === 'profilePic') {
+      if (e.target.files && e.target.files.length > 0) {
+        const acceptedImageTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+        console.log(e.target.files[0]);
+        
+        const isValidImage = acceptedImageTypes.includes(e.target.files[0]['type']);
 
-    else if (e.target.id === 'profilePic')
-    {
-      this.setState({
-        profilePic: e.target.value
-      })
-    }
-
-    else if (e.target.id === 'password')
-    {
+        if (isValidImage) {
+          const reader = new FileReader();
+          reader.addEventListener(
+            'load',
+            () =>
+              this.setState({
+                imgSrc: reader.result,
+              }),
+            false
+          );
+          reader.readAsDataURL(e.target.files[0])
+        } else {
+          Toaster.warn('Please select a valid image file.');
+        }
+      }
+    } else if (e.target.id === 'password') {
       this.setState({
         password: e.target.value
       })
     }    
   }
 
-  submitContactForm(e)
-  {
+  submitContactForm(e) {
     e.preventDefault();
-    let reqObj = 
-    {
+    let reqObj = {
       "name":this.state.name,
       "email":this.state.email,
       "phone":this.state.phone,
@@ -160,8 +159,8 @@ class SignpuStepone extends Component {
       "locationId":this.state.address,
       "lat": 151.225594,
       "long": -33.878563
-    }
- console.log('reqObj',reqObj)
+    };
+
  fetch('https://agent-snapp-api.herokuapp.com/user/signup',
  {
    method:"POST",
@@ -186,18 +185,19 @@ class SignpuStepone extends Component {
 
   }
 
-
- 
-
   render() {
 
     const {
       facebookId,
       name,
       email,
-      profilePic
+      profilePic,
+      imgBlob,
     } = this.state;
-
+    
+    const imageSrc = imgBlob ? URL.createObjectURL(imgBlob) : UploadAvtar;
+    console.log({imageSrc});
+    
     return (
       <div id="Singup">
         <div className="container">
@@ -305,10 +305,16 @@ class SignpuStepone extends Component {
                     <input type="text" onChange={(e)=>this.onChange(e)} class="form-control input" placeholder="123456789" id="mls" name="mls" required/>
                   </div>
                   <div class="col-sm-6 col-12 mt-2 d-flex align-items-end col">
-                    <img src={UploadAvtar} alt="Avatar" class="UploadUserAvtar rounded-circle mr-2" />
+                    <img src={imageSrc} alt="Avatar" class="UploadUserAvtar rounded-circle mr-2" />
                     <div class="flex-fill"><span class="d-block">Profile Photo</span>
                       <button type="button" class="btn btn-light d-block w-100 btn btn-secondary">Browse</button>
-                      <input type="file" onChange={(e)=>this.onChange(e)} id="profilePic" class="form-control-file"  />
+                      <input
+                        type="file"
+                        onChange={(e)=>this.onChange(e)} 
+                        id="profilePic" 
+                        class="form-control-file"
+                        accept="image/*"
+                      />
                     </div>
                   </div>
                 </div>
@@ -343,16 +349,24 @@ class SignpuStepone extends Component {
               </div>
             </div>
           </div>
+          {
+            this.state.imgSrc && <ImageCropper
+              onCropComplete={image => {
+                this.setState({
+                  imgBlob: image,
+                  imgSrc: undefined
+                });
+              }}
+              imgSrc={this.state.imgSrc}
+              onCloseClick={()=> this.setState({imgSrc: undefined})}
+              circularCrop
+            />
+          }
         </div>
       </div>
-
-
-
-
-
     );
 
   }
 }
 
-export default withRouter(SignpuStepone);
+export default withRouter(Signup);

@@ -13,7 +13,7 @@ import experience from './components/experience';
 import NewTalent from './components/newtalent';
 import login from './components/auth/login';
 import loginPassword from './components/auth/loginPassword';
-import Signup1 from './components/auth/Signup1';
+import Signup from './components/auth/Signup';
 import mode from './components/dashboard/mode';
 import Counter from './components/count';
 import setting from './components/dashboard/Worker/setting';
@@ -38,7 +38,7 @@ const App = () => (<AppLoaderWrapper>
                 <Route path="/newtalent" component={NewTalent} />
                 <Route path="/login" component={login} />
                 <Route path="/password" component={loginPassword} />
-                <Route path="/signupsetpone" component={Signup1} />
+                <Route path="/signup" component={Signup} />
                 <Route path="/mode" component={mode} />
                 <Route path="/count" component={Counter} />
                 <Route path="/worker" component={worker} />

@@ -102,12 +102,39 @@ class Login extends Component {
                 <p className="otp text-center">Sign up or login with your email instead</p>
 
                 <form>
-                  <input class="form-control w-main mx-auto rounded-0" type="text" placeholder="Enter your email" name="email" />
-                  <div class="text-center text-danger">
-
+                  <div class="my-2 row">
+                    <input 
+                      class="form-control w-main mx-auto rounded-0" 
+                      type="text" 
+                      placeholder="Enter your email" 
+                      name="email"
+                    />
                   </div>
-                  <button type="submit" class="btn text-center d-block rounded-0 w-third bgc-main border-0 mx-auto my-2 c-white py-2 btn btn-secondary" onClick={()=>this.props.history.push('/mode')}>Let's start</button>
-                  <a class="btn text-center d-block rounded-0 w-third bgc-main border-0 mx-auto c-white py-2 f-main-b" onClick={()=>this.props.history.push('/signgupsetpone')}><span>Sign Up</span></a>
+                  <div class="my-2 row">
+                    <input
+                      type="password"
+                      class="form-control input" 
+                      placeholder="Password"
+                      id="password"
+                      name="password"
+                      required
+                    />
+                  </div>
+                  <div className="py-2">
+                    <button
+                      type="submit"
+                      class="btn text-center d-block rounded-0 w-third bgc-main border-0 mx-auto my-2 c-white py-2 btn btn-secondary"
+                      onClick={()=>this.props.history.push('/mode')}
+                    >
+                      Login
+                    </button>
+                    <a
+                      class="btn text-center d-block rounded-0 w-third bgc-main border-0 mx-auto c-white py-2 f-main-b" 
+                      onClick={()=>this.props.history.push('/signup')}
+                    >
+                      <span>Sign Up</span>
+                    </a>
+                  </div>
                 </form>
               </div>
               <div className="col-md-4">

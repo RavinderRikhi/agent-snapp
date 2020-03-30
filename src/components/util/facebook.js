@@ -12,13 +12,8 @@ class FacebookUtil {
         FB.init({
             appId: appId,
             status: true,
-            cookie: true,
             xfbml: true,
             version: appVersion
-        });
-
-        FB.getLoginStatus(function(response){
-            console.log({response});
         });
 
     }
@@ -57,6 +52,6 @@ class FacebookUtil {
     });
 }
 
-const FBUtil = new FacebookUtil(1624742564354986, 'v6.0');
+const FBUtil = new FacebookUtil('1624742564354986', 'v6.0');
 
 export default FBUtil;
